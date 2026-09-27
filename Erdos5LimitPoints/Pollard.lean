@@ -78,10 +78,12 @@ lemma cast_rep_eq_sum : (rep A B x : ℤ) = ∑ a, if a ∈ A ∧ x - a ∈ B th
   ext a
   simp
 
+omit [Fintype G] in
 /-- The **Dyson decomposition** of the representation function:
 `rep A B = rep (A ∩ B) (A ∪ B) + rep (A \ B) (B \ A)`. -/
-lemma rep_eq_rep_inter_union_add_rep_sdiff :
+lemma rep_eq_rep_inter_union_add_rep_sdiff [Finite G] :
     rep A B x = rep (A ∩ B) (A ∪ B) x + rep (A \ B) (B \ A) x := by
+  have := Fintype.ofFinite G
   zify
   rw [cast_rep_eq_sum, cast_rep_eq_sum, cast_rep_eq_sum, ← sub_eq_zero, ← sum_add_distrib,
     ← sum_sub_distrib]
