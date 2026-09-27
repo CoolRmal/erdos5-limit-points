@@ -1,0 +1,24 @@
+name: Palomar preflight
+
+# Runs Palomar's own mechanical verification (the reusable workflow published by
+# PalomarRegistry/PalomarSubmission) on this repository: metadata and licence checks,
+# Challenge dependency closure, and `lake comparator` with the Lean kernel, NanoDa and
+# con-ron. The report is advisory; it is not a registry submission.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  palomar-preflight:
+    uses: PalomarRegistry/PalomarSubmission/.github/workflows/submission.yml@a59f25bd8a66bf6faf3a4f4260d412989c0185ea
+    with:
+      repository: ${{ github.repository }}
+      commit: ${{ github.sha }}
+      pipeline_commit: a59f25bd8a66bf6faf3a4f4260d412989c0185ea
+      request_id: preflight${{ github.run_number }}
+      mode: full
+      options: '{"comparator_config_path":"comparator.json","authorization_relationship":"I am a responsible author or maintainer"}'
