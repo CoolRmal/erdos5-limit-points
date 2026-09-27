@@ -1,0 +1,223 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "Sets with Merikoski's four-point property have lower density at least 25/74 (limit points of normalised prime gaps, Erdős Problem #5)"
+  description: >-
+    A set B of reals has the four-point property if for all reals b1 <= b2 <= b3 <= b4 one of
+    the six differences bj - bi (i < j) lies in B. Merikoski (2020) proved that the set L of
+    limit points of the normalised prime gaps (p_{n+1} - p_n)/log n has this property and
+    deduced that L occupies at least one third of [0, T] for every T; this is the best known
+    bound towards Erdős Problem #5, which asks whether L = [0, infinity]. This project
+    formalises in Lean 4 and Mathlib a note showing that the constant 1/3 is not sharp
+    asymptotically: every set B with the four-point property satisfies
+    Leb(B ∩ [0, T]) >= (25/74) T - C for a constant C and all T, hence
+    liminf Leb(B ∩ [0, T]) / T >= 25/74 = 1/3 + 1/222. No measurability of B is assumed. As
+    corollaries, conditional on Merikoski's theorem (taken as an explicit hypothesis, not
+    formalised), Leb(L ∩ [0, T]) >= (76/225) T for all large T, for both normalisations
+    log n and log p_n; it is also proved unconditionally, via Chebyshev's bound, that the
+    two normalisations have the same limit points. The proof formalised includes a hexagon
+    lemma, a K4 labelling lemma, an additivity argument, Pollard's theorem in Z/pZ, a
+    continuous Pollard inequality on the circle obtained by discretisation (used in place of
+    the Riesz–Sobolev inequality of the note), a circle lemma with the sharp constant 3/4, and
+    an averaging argument with an explicit power weight.
+  authors:
+    - "Yongxi Lin"
+  responsible_maintainers:
+    - "Yongxi Lin"
+  license: "Apache-2.0"
+
+sources:
+  - title: "More than one third of the positive reals are limit points of normalized prime gaps"
+    authors: []
+    id: "Unpublished note (draft dated 2026-09-26)"
+    type: "paper"
+    location: "Theorem 1.2 and Corollary 1.3, with all lemmas of Sections 2-8"
+    relationship: "formalizes"
+    note: >-
+      The note states that it was prepared with substantial AI assistance (Claude, Anthropic),
+      including the argument itself. At the time of this commit it is an unpublished draft;
+      its authorship and a stable identifier are to be added when it is made public. The
+      formalisation proves Theorem 1.2 (in a slightly stronger form) and Corollary 1.3
+      conditionally on Merikoski's Theorem 1.
+    author_endorsement: "participated"
+  - title: "Limit points of normalized prime gaps"
+    authors: ["Jori Merikoski"]
+    id: "doi:10.1112/jlms.12314 (arXiv:1811.03008)"
+    type: "paper"
+    location: "Theorem 1 (the four-point property of the set of limit points)"
+    relationship: "background"
+    note: >-
+      Theorem 1 of this paper is used only as the explicit hypothesis `merikoski` of the
+      corollaries about prime gaps; it is not formalised.
+    author_endorsement: "not-contacted"
+  - title: "Erdős Problem #5"
+    contributors:
+      - name: "Paul Erdős"
+        role: "problem-proposer"
+      - name: "Thomas F. Bloom"
+        role: "editor of erdosproblems.com"
+    id: "https://www.erdosproblems.com/5"
+    type: "web discussion"
+    relationship: "background"
+    author_endorsement: "n/a"
+  - title: "A generalisation of the theorem of Cauchy and Davenport"
+    authors: ["J. M. Pollard"]
+    id: "doi:10.1112/jlms/s2-8.3.460"
+    type: "paper"
+    location: "Main theorem (Pollard's theorem for Z/pZ)"
+    relationship: "formalizes"
+    note: "Pollard's theorem in Z/pZ is formalised as `Erdos5.Pollard.pollard`."
+    author_endorsement: "not-contacted"
+  - title: "A note on Pollard's Theorem"
+    authors: ["Yahya Ould Hamidoune", "Oriol Serra"]
+    id: "arXiv:0804.2593"
+    type: "paper"
+    location: "Lemma 3 and the proof of Theorem 1"
+    relationship: "adapts"
+    note: >-
+      The formal proof of Pollard's theorem follows the Dyson-transform induction of this
+      note, specialised to groups of prime order.
+    author_endorsement: "not-contacted"
+  - title: "Inequalities of Riesz-Sobolev type for compact connected abelian groups"
+    authors: ["Michael Christ", "Marina Iliopoulou"]
+    id: "arXiv:1808.08368"
+    type: "paper"
+    relationship: "background"
+    note: >-
+      Cited by the note for the Riesz–Sobolev inequality on the circle and its relation to
+      Pollard's theorem; the formalisation replaces the Riesz–Sobolev inequality by a
+      continuous Pollard inequality proved by discretisation.
+    author_endorsement: "not-contacted"
+
+related_formalizations:
+  - id: "https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/ErdosProblems/5.lean"
+    relationship: "other"
+    note: >-
+      Formal Conjectures states Erdős Problem #5 and its known variants (without proofs). The
+      definitions `primeGap`, `normalizedGap` and `limitPointSet` of `Challenge.lean` are copied
+      from it verbatim (up to the namespace of `primeGap`), and the hypothesis `merikoski` of
+      the corollaries is its statement `erdos_5.variants.merikoski`. This project does not
+      depend on Formal Conjectures (whose toolchain is older than Palomar's minimum).
+
+classification:
+  arxiv: ["math.NT", "math.CO", "math.CA"]
+  msc2020: ["11N05", "11P70", "11B30", "28A12", "26D15"]
+
+status:
+  scope: >-
+    Complete formalisation of Theorem 1.2 of the note (for arbitrary sets with the four-point
+    property) and of Corollary 1.3 conditional on Merikoski's Theorem 1, plus the equality of
+    the limit point sets for the two normalisations of the prime gaps.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: ["propext", "Classical.choice", "Quot.sound"]
+  main_results:
+    - declaration: "Erdos5.HasFourPointProperty.exists_volume_inter_Icc_ge"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Erdos5.HasFourPointProperty.le_liminf_volume_inter_Icc_div"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Erdos5.eventually_volume_limitPointSet_inter_Icc_ge_of_merikoski"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+      literature_dependencies:
+        - statement: >-
+            Merikoski's Theorem 1: the set of limit points of the normalised prime gaps has the
+            four-point property (taken as the explicit hypothesis `merikoski`).
+          source: "Limit points of normalized prime gaps"
+    - declaration: "Erdos5.limitPointSet_eq_limitPointSetLogPrime"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["claude-opus-5-5"]
+      framework: "Claude Code (desktop app)"
+      tool_setup: >-
+        A single Claude Code session with shell access to the Lean toolchain and Mathlib. The
+        orchestrating agent read the PDF of the note, designed the challenge statements and a
+        skeleton of all lemmas with `sorry`, and wrote parts of the proof itself (Section 7,
+        the main assembly, the normalisation equivalence); self-contained files (Pollard's
+        theorem, the circle Pollard inequality, the circle lemma, Sections 3-4, Section 5,
+        Section 8) were delegated to parallel sub-agents of the same model, each compiling
+        its file with `lake env lean`. Web access was used for the Palomar and comparator
+        documentation and for the literature on Pollard's theorem.
+      cost:
+        wall_time: "about one day"
+        spend_usd: "subscription-based usage"
+        hardware: "API-only (a laptop for compiling Lean)"
+      prompting_notes: >-
+        The user asked for a complete formalisation of the note, checked by the comparator,
+        suitable for Palomar and for the Erdős problems website, in a public GitHub
+        repository with a comparator CI job.
+  spend_usd: "subscription-based usage"
+  notes: >-
+    The mathematical argument of the note itself was, according to the note, obtained with
+    substantial AI assistance. The deviations of the formal proof from the note (see
+    `fidelity`) were chosen by the formalising agent.
+
+fidelity:
+  divergences: >-
+    (1) The Riesz–Sobolev inequality on the circle (Theorem 6.1 of the note, not in Mathlib)
+    is replaced by a continuous Pollard inequality on the circle, proved from Pollard's theorem
+    in Z/NZ by discretisation at primes N; Lemma 6.3 is then proved with the same constant 3/4.
+    (2) The threshold c0 is 7 r2 instead of 3 r2, which removes the O(1) correction in the
+    averaging argument of Section 8; the constant 25/74 is unchanged. (3) Theorem 1.2 is
+    proved in the stronger form Leb(B ∩ [0, T]) >= (25/74) T - C, for arbitrary B (no
+    measurability or B ⊆ [0, infinity) needed); the liminf is taken in the extended
+    nonnegative reals. (4) Only finite limit points are considered (the point infinity plays
+    no role in the measure statements). (5) Primes are indexed from p_0 = 2 and the log n
+    normalisation follows Formal Conjectures; the log p_n normalisation of Merikoski is also
+    covered and the two limit point sets are proved equal. (6) Merikoski's Theorem 1 is a
+    hypothesis of the corollaries, not a formalised theorem.
+
+review:
+  status: "unchecked"
+  reviewers: []
+  notes: >-
+    The proofs are machine-checked (Lean kernel; `lake comparator --paranoid` in CI). The
+    alignment of the statements in `Challenge.lean` with the note has not yet been reviewed
+    by a person other than the formalising agent.
+
+alignment:
+  namespace: "Erdos5"
+  statements:
+    - source: "Theorem 1.2"
+      lean: "Erdos5.HasFourPointProperty.exists_volume_inter_Icc_ge, Erdos5.HasFourPointProperty.le_liminf_volume_inter_Icc_div"
+      module: "Challenge"
+      status: "proved"
+    - source: "Corollary 1.3"
+      lean: "Erdos5.eventually_volume_limitPointSet_inter_Icc_ge_of_merikoski (and the LogPrime and O(1) variants)"
+      module: "Challenge"
+      status: "proved (conditional on Merikoski's Theorem 1, as a hypothesis)"
+    - source: "Theorem 1.1 (Merikoski)"
+      lean: "hypothesis `merikoski` of the corollaries"
+      module: "Challenge"
+      status: "literature-dependency"
+    - source: "Introduction: the normalisations log n and log p_n have the same limit points"
+      lean: "Erdos5.limitPointSet_eq_limitPointSetLogPrime"
+      module: "Challenge"
+      status: "proved"
+    - source: "Lemmas 2.1, 2.2, 3.1, 3.2, 4.2-4.6, 5.1-5.3, 6.3, 7.1, 7.3, Corollary 7.4, Proposition 3.3"
+      lean: "see README.md (table 'Proof outline and map of the library')"
+      module: "Erdos5LimitPoints"
+      status: "proved"
+    - source: "Theorem 6.1 (Riesz–Sobolev on the circle)"
+      lean: "replaced by Erdos5.Circle.circle_pollard"
+      module: "Erdos5LimitPoints.CirclePollard"
+      status: "other: replaced by a different inequality that suffices for Lemma 6.3"
+
+acknowledgements: >-
+  Mathlib; the Formal Conjectures project for the formal statement of Erdős Problem #5; the
+  Palomar registry documentation.
