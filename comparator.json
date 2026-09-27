@@ -1,0 +1,13 @@
+{
+  "challenge_module": "Challenge",
+  "solution_module": "Solution",
+  "theorem_names": [
+    "Erdos5.HasFourPointProperty.exists_volume_inter_Icc_ge",
+    "Erdos5.HasFourPointProperty.le_liminf_volume_inter_Icc_div",
+    "Erdos5.exists_volume_limitPointSet_inter_Icc_ge_of_merikoski",
+    "Erdos5.eventually_volume_limitPointSet_inter_Icc_ge_of_merikoski",
+    "Erdos5.exists_volume_limitPointSetLogPrime_inter_Icc_ge_of_merikoski",
+    "Erdos5.eventually_volume_limitPointSetLogPrime_inter_Icc_ge_of_merikoski"
+  ],
+  "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"]
+}
