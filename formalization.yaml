@@ -6,13 +6,15 @@ project:
   description: >-
     A set B of reals has the four-point property if for all reals b1 <= b2 <= b3 <= b4 one of
     the six differences bj - bi (i < j) lies in B. Merikoski (2020) proved that the set L of
-    limit points of the normalised prime gaps (p_{n+1} - p_n)/log n has this property and
+    limit points of the normalised prime gaps (p_{n+1} - p_n)/log p_n (equivalently
+    /log n) has this property and
     deduced that L occupies at least one third of [0, T] for every T; this is the best known
     bound towards Erdős Problem #5, which asks whether L = [0, infinity]. This project
     formalises in Lean 4 and Mathlib a note showing that the constant 1/3 is not sharp
     asymptotically: every set B with the four-point property satisfies
-    Leb(B ∩ [0, T]) >= (25/74) T - C for a constant C and all T, hence
-    liminf Leb(B ∩ [0, T]) / T >= 25/74 = 1/3 + 1/222. No measurability of B is assumed. As
+    Leb*(B ∩ [0, T]) >= (25/74) T - C for a constant C and all T (Leb* = Lebesgue outer
+    measure), hence
+    liminf Leb*(B ∩ [0, T]) / T >= 25/74 = 1/3 + 1/222. No measurability of B is assumed. As
     corollaries, conditional on Merikoski's theorem (taken as an explicit hypothesis, not
     formalised), Leb(L ∩ [0, T]) >= (76/225) T for all large T, for both normalisations
     log n and log p_n; it is also proved unconditionally, via Chebyshev's bound, that the
@@ -32,15 +34,16 @@ sources:
     authors: []
     id: "Unpublished note (draft dated 2026-09-26)"
     type: "paper"
-    location: "Theorem 1.2 and Corollary 1.3, with all lemmas of Sections 2-8"
+    location: "Theorem 1.2 and Corollary 1.3, with the lemmas of Sections 2-8 except Theorem 6.1 and Lemma 6.2 (replaced; see fidelity)"
     relationship: "formalizes"
     note: >-
       The note states that it was prepared with substantial AI assistance (Claude, Anthropic),
       including the argument itself. At the time of this commit it is an unpublished draft;
-      its authorship and a stable identifier are to be added when it is made public. The
+      its authorship and a stable identifier are to be added when it is made public
+      (author_endorsement "other": to be completed together with the authorship). The
       formalisation proves Theorem 1.2 (in a slightly stronger form) and Corollary 1.3
       conditionally on Merikoski's Theorem 1.
-    author_endorsement: "participated"
+    author_endorsement: "other"
   - title: "Limit points of normalized prime gaps"
     authors: ["Jori Merikoski"]
     id: "doi:10.1112/jlms.12314 (arXiv:1811.03008)"
@@ -91,13 +94,13 @@ sources:
     author_endorsement: "not-contacted"
 
 related_formalizations:
-  - id: "https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/ErdosProblems/5.lean"
+  - id: "https://github.com/google-deepmind/formal-conjectures/blob/6fbb54f24ccc2e64dcfaffc28c58950e377110d2/FormalConjectures/ErdosProblems/5.lean"
     relationship: "other"
     note: >-
       Formal Conjectures states Erdős Problem #5 and its known variants (without proofs). The
       definitions `primeGap`, `normalizedGap` and `limitPointSet` of `Challenge.lean` are copied
-      from it verbatim (up to the namespace of `primeGap`), and the hypothesis `merikoski` of
-      the corollaries is its statement `erdos_5.variants.merikoski`. This project does not
+      from it verbatim up to name qualification, and the hypothesis `merikoski` of the
+      corollaries is the same proposition as its statement `erdos_5.variants.merikoski`. This project does not
       depend on Formal Conjectures (whose toolchain is older than Palomar's minimum).
 
 classification:
@@ -123,7 +126,37 @@ status:
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
       comparator_config: "comparator.json"
+    - declaration: "Erdos5.exists_volume_limitPointSet_inter_Icc_ge_of_merikoski"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+      literature_dependencies:
+        - statement: >-
+            Merikoski's Theorem 1: the set of limit points of the normalised prime gaps has the
+            four-point property (taken as the explicit hypothesis `merikoski`).
+          source: "Limit points of normalized prime gaps"
     - declaration: "Erdos5.eventually_volume_limitPointSet_inter_Icc_ge_of_merikoski"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+      literature_dependencies:
+        - statement: >-
+            Merikoski's Theorem 1: the set of limit points of the normalised prime gaps has the
+            four-point property (taken as the explicit hypothesis `merikoski`).
+          source: "Limit points of normalized prime gaps"
+    - declaration: "Erdos5.exists_volume_limitPointSetLogPrime_inter_Icc_ge_of_merikoski"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+      literature_dependencies:
+        - statement: >-
+            Merikoski's Theorem 1: the set of limit points of the normalised prime gaps has the
+            four-point property (taken as the explicit hypothesis `merikoski`).
+          source: "Limit points of normalized prime gaps"
+    - declaration: "Erdos5.eventually_volume_limitPointSetLogPrime_inter_Icc_ge_of_merikoski"
       file: "Solution.lean"
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]

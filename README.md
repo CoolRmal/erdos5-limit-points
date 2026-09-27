@@ -2,25 +2,29 @@
 
 [![CI](https://github.com/CoolRmal/erdos5-limit-points/actions/workflows/ci.yml/badge.svg)](https://github.com/CoolRmal/erdos5-limit-points/actions/workflows/ci.yml)
 
-A complete Lean 4 / Mathlib formalisation of the note
+A Lean 4 / Mathlib formalisation of the main theorem (Theorem 1.2) of the note
 
 > *More than one third of the positive reals are limit points of normalized prime gaps*
 > (draft, September 2026)
 
 which improves, in the direction of [Erdős Problem #5](https://www.erdosproblems.com/5), the
-constant `1/3` of Merikoski [Me20] to `25/74 = 1/3 + 1/222`.
+constant `1/3` of Merikoski [Me20] to `25/74 = 1/3 + 1/222`. The note's Corollary 1.3 about
+prime gaps is proved conditionally on Merikoski's theorem [Me20, Theorem 1], which is taken as
+a hypothesis.
 
 ## The mathematics
 
 Let `pₙ` be the `n`-th prime and let `𝕃` be the set of limit points of the normalised prime gaps
 `(pₙ₊₁ − pₙ) / log n` (equivalently, of `(pₙ₊₁ − pₙ) / log pₙ`; see below). Erdős asked whether
-`𝕃 = [0, ∞]`. A set `B ⊆ ℝ` has the **four-point property** if for all reals
+`𝕃 = [0, ∞]` (for the finite limit points: `𝕃 = [0, ∞)`). A set `B ⊆ ℝ` has the **four-point property** if for all reals
 `β₁ ≤ β₂ ≤ β₃ ≤ β₄` one of the six differences `βⱼ − βᵢ` (`i < j`) lies in `B`.
 Merikoski [Me20, Theorem 1] proved, using the Maynard–Tao sieve, that `𝕃` has the four-point
 property, and deduced `λ(𝕃 ∩ [0, T]) ≥ T/3` for all `T > 0` (`λ` = Lebesgue measure). The bound
 `1/3` is sharp for sets with the four-point property at any single scale `T`.
 
-The note proves that asymptotically `1/3` is not sharp:
+The note proves that asymptotically `1/3` is not sharp (Theorem 1.2 of the note, stated there
+for Lebesgue-measurable `B ⊆ [0, ∞)` and in the `liminf` form; the formalisation proves it for
+arbitrary `B ⊆ ℝ` and in the `O(1)` form):
 
 > **Theorem.** If `B ⊆ ℝ` has the four-point property, then
 > `liminf_{T→∞} λ(B ∩ [0, T]) / T ≥ 25/74`; in fact `λ(B ∩ [0, T]) ≥ (25/74) T − C` for a
