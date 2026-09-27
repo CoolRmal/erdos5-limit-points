@@ -283,6 +283,25 @@ lemma measurable_K₃raw (p q : ℝ) : Measurable (S.K₃raw p q) := by
       (Measurable.ite (S.measurableSet_certified_affine (p + q) S.r₁)
         (S.measurable_kappa_affine (p + q) S.r₁) measurable_const))
 
+lemma rep_coe_add {z w : ℝ} (hz : z ∈ Ico (0 : ℝ) 3) (hw : w ∈ Ico (0 : ℝ) 3) :
+    rep ((z : AddCircle (3 : ℝ)) + (w : AddCircle (3 : ℝ))) =
+      if z + w < 3 then z + w else z + w - 3 := by
+  rw [← AddCircle.coe_add]
+  split_ifs with h
+  · exact rep_coe ⟨by linarith [hz.1, hw.1], h⟩
+  · have : ((z + w : ℝ) : AddCircle (3 : ℝ)) = ((z + w - 3 : ℝ) : AddCircle (3 : ℝ)) := by
+      rw [AddCircle.coe_sub, AddCircle.coe_period, sub_zero]
+    rw [this]
+    exact rep_coe ⟨by linarith, by linarith [hz.2, hw.2]⟩
+
+/-- The covering map `[0, 3) → ℝ / 3ℤ` is measure preserving. -/
+lemma measurePreserving_coe_Ico :
+    MeasurePreserving (fun x : ℝ => (x : AddCircle (3 : ℝ)))
+      (volume.restrict (Ico (0 : ℝ) 3)) volume := by
+  have h := AddCircle.measurePreserving_mk (3 : ℝ) 0
+  rw [zero_add] at h
+  rwa [Measure.restrict_congr_set Ico_ae_eq_Ioc]
+
 end Circle
 
 /-- **Corollary 7.4.** At least a quarter of the pairs `(z, w) ∈ [0, 3)²` are not admissible. -/
@@ -291,6 +310,63 @@ theorem volume_not_admissible {T p q : ℝ}
     (hpq : p + q + 6 * S.r₁ ≤ T - 2 * S.r₂) :
     ENNReal.ofReal (9 / 4) ≤
       volume {x : ℝ × ℝ | x ∈ Ico (0 : ℝ) 3 ×ˢ Ico (0 : ℝ) 3 ∧ ¬ S.Admissible p q x.1 x.2} := by
-  sorry
+  classical
+  -- the three functions on the circle
+  set K₁ : AddCircle (3 : ℝ) → ZMod 3 := fun ω => S.K₁raw p (rep ω) with hK₁
+  set K₂ : AddCircle (3 : ℝ) → ZMod 3 := fun ω => S.K₂raw q (rep ω) with hK₂
+  set K₃ : AddCircle (3 : ℝ) → ZMod 3 := fun ω => S.K₃raw p q (rep ω) with hK₃
+  have m₁ : Measurable K₁ := (S.measurable_K₁raw p).comp measurable_rep
+  have m₂ : Measurable K₂ := (S.measurable_K₂raw q).comp measurable_rep
+  have m₃ : Measurable K₃ := (S.measurable_K₃raw p q).comp measurable_rep
+  have hK₂one : ∀ ω, K₂ (ω + ((1 : ℝ) : AddCircle (3 : ℝ))) = K₂ ω - 1 := fun ω => by
+    simp only [hK₂]
+    conv_lhs => rw [← coe_rep ω, ← AddCircle.coe_add]
+    rw [periodic_rep_coe (S.K₂raw_periodic q), K₂raw_add_one]
+  set X := {x : AddCircle (3 : ℝ) × AddCircle (3 : ℝ) | K₃ (x.1 + x.2) = K₁ x.1 + K₂ x.2}
+    with hX
+  have hXle : volume X ≤ ENNReal.ofReal (27 / 4) :=
+    Circle.circle_lemma K₁ K₂ K₃ (fun c => m₁ (measurableSet_singleton c))
+      (fun c => m₂ (measurableSet_singleton c)) (fun c => m₃ (measurableSet_singleton c)) hK₂one
+  have hXm : MeasurableSet X :=
+    measurableSet_eq_fun (m₃.comp measurable_add)
+      ((measurable_of_countable fun x : ZMod 3 × ZMod 3 => x.1 + x.2).comp
+        ((m₁.comp measurable_fst).prodMk (m₂.comp measurable_snd)))
+  -- transfer to `[0, 3)²`
+  set Z : Set (ℝ × ℝ) := Ico (0 : ℝ) 3 ×ˢ Ico (0 : ℝ) 3 with hZ
+  have hZm : MeasurableSet Z := measurableSet_Ico.prod measurableSet_Ico
+  set Φ : ℝ × ℝ → AddCircle (3 : ℝ) × AddCircle (3 : ℝ) :=
+    Prod.map (fun x : ℝ => (x : AddCircle (3 : ℝ))) (fun x : ℝ => (x : AddCircle (3 : ℝ)))
+  have hΦ : MeasurePreserving Φ (volume.restrict Z) volume := by
+    have := measurePreserving_coe_Ico.prod measurePreserving_coe_Ico
+    rwa [Measure.prod_restrict, ← Measure.volume_eq_prod, ← Measure.volume_eq_prod] at this
+  have hadm : {x : ℝ × ℝ | x ∈ Z ∧ S.Admissible p q x.1 x.2} ⊆ Φ ⁻¹' X ∩ Z := by
+    rintro ⟨z, w⟩ ⟨⟨hz, hw⟩, h⟩
+    refine ⟨?_, hz, hw⟩
+    simp only [Φ, hX, mem_preimage, Prod.map_apply, mem_ofPred_eq, hK₁, hK₂, hK₃]
+    rw [rep_coe_add hz hw, rep_coe hz, rep_coe hw]
+    exact S.K₃raw_eq_of_admissible hT hpq hz hw h
+  have hvolZ : volume Z = ENNReal.ofReal 9 := by
+    rw [hZ, Measure.volume_eq_prod, Measure.prod_prod, Real.volume_Ico, sub_zero,
+      ← ENNReal.ofReal_mul (by norm_num)]
+    norm_num
+  have hA : volume {x : ℝ × ℝ | x ∈ Z ∧ S.Admissible p q x.1 x.2} ≤ ENNReal.ofReal (27 / 4) :=
+    calc _ ≤ volume (Φ ⁻¹' X ∩ Z) := measure_mono hadm
+      _ = volume.restrict Z (Φ ⁻¹' X) := (Measure.restrict_apply' hZm).symm
+      _ = volume X := hΦ.measure_preimage hXm.nullMeasurableSet
+      _ ≤ _ := hXle
+  have hsplit : Z ⊆ {x : ℝ × ℝ | x ∈ Z ∧ S.Admissible p q x.1 x.2} ∪
+      {x : ℝ × ℝ | x ∈ Z ∧ ¬ S.Admissible p q x.1 x.2} := fun x hx => by
+    by_cases h : S.Admissible p q x.1 x.2
+    · exact Or.inl ⟨hx, h⟩
+    · exact Or.inr ⟨hx, h⟩
+  have h9 : ENNReal.ofReal 9 ≤ ENNReal.ofReal (27 / 4) +
+      volume {x : ℝ × ℝ | x ∈ Z ∧ ¬ S.Admissible p q x.1 x.2} := by
+    rw [← hvolZ]
+    exact (measure_mono hsplit).trans ((measure_union_le _ _).trans (add_le_add hA le_rfl))
+  have h94 : ENNReal.ofReal 9 = ENNReal.ofReal (27 / 4) + ENNReal.ofReal (9 / 4) := by
+    rw [← ENNReal.ofReal_add (by norm_num) (by norm_num)]
+    norm_num
+  rw [h94] at h9
+  exact (ENNReal.add_le_add_iff_left ENNReal.ofReal_ne_top).1 h9
 
 end Erdos5.Setting
