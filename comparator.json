@@ -7,7 +7,12 @@
     "Erdos5.exists_volume_limitPointSet_inter_Icc_ge_of_merikoski",
     "Erdos5.eventually_volume_limitPointSet_inter_Icc_ge_of_merikoski",
     "Erdos5.exists_volume_limitPointSetLogPrime_inter_Icc_ge_of_merikoski",
-    "Erdos5.eventually_volume_limitPointSetLogPrime_inter_Icc_ge_of_merikoski"
+    "Erdos5.eventually_volume_limitPointSetLogPrime_inter_Icc_ge_of_merikoski",
+    "Erdos5.limitPointSet_eq_limitPointSetLogPrime"
   ],
-  "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"]
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ]
 }

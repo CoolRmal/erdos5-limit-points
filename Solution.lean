@@ -54,4 +54,7 @@ theorem eventually_volume_limitPointSetLogPrime_inter_Icc_ge_of_merikoski
       ENNReal.ofReal (76 / 225 * T) ≤ volume (limitPointSetLogPrime ∩ Icc 0 T) :=
   Main.eventually_volume_inter_Icc_ge merikoski
 
+theorem limitPointSet_eq_limitPointSetLogPrime : limitPointSet = limitPointSetLogPrime :=
+  Normalization.limitPointSet_eq_limitPointSetLogPrime
+
 end Erdos5

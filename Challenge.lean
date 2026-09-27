@@ -144,4 +144,15 @@ theorem eventually_volume_limitPointSetLogPrime_inter_Icc_ge_of_merikoski
       ENNReal.ofReal (76 / 225 * T) ≤ volume (limitPointSetLogPrime ∩ Icc 0 T) := by
   sorry
 
+/-! ### The two normalisations -/
+
+/-- The two normalisations have the same limit points: since `log pₙ / log n → 1` (a consequence
+of Chebyshev's elementary lower bound for the number of primes up to `x`), the sets of limit
+points of `(pₙ₊₁ - pₙ) / log n` and of `(pₙ₊₁ - pₙ) / log pₙ` coincide. In particular the
+conditional corollaries above for the two normalisations are equivalent, and Merikoski's
+theorem as stated in [Me20] (for the `log pₙ` normalisation) is the same statement as its
+Formal Conjectures version (for the `log n` normalisation). -/
+theorem limitPointSet_eq_limitPointSetLogPrime : limitPointSet = limitPointSetLogPrime := by
+  sorry
+
 end Erdos5

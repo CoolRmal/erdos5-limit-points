@@ -12,3 +12,4 @@ import Erdos5LimitPoints.Additivity
 import Erdos5LimitPoints.LocalContradiction
 import Erdos5LimitPoints.Averaging
 import Erdos5LimitPoints.Main
+import Erdos5LimitPoints.Normalization
