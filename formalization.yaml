@@ -187,7 +187,7 @@ automation:
         its file with `lake env lean`. Web access was used for the Palomar and comparator
         documentation and for the literature on Pollard's theorem.
       cost:
-        wall_time: "about one day"
+        wall_time: "about 2.5 hours (2026-09-26/27), with up to six agents in parallel"
         spend_usd: "subscription-based usage"
         hardware: "API-only (a laptop for compiling Lean)"
       prompting_notes: >-
@@ -216,12 +216,15 @@ fidelity:
     hypothesis of the corollaries, not a formalised theorem.
 
 review:
-  status: "unchecked"
-  reviewers: []
+  status: "agent-reviewed"
+  reviewers: ["independent read-only sub-agent (claude-opus-5-5)"]
   notes: >-
-    The proofs are machine-checked (Lean kernel; `lake comparator --paranoid` in CI). The
-    alignment of the statements in `Challenge.lean` with the note has not yet been reviewed
-    by a person other than the formalising agent.
+    The proofs are machine-checked (Lean kernel locally; `lake comparator --paranoid`, i.e.
+    Lean kernel plus the bundled external checkers, in CI). An independent read-only agent
+    audited the statements of `Challenge.lean` against the note (definitions, quantifiers,
+    coercions, indexing, measure conventions, the hypotheses `merikoski`) and found them
+    faithful; its presentation findings were addressed. No human review of the statements
+    has been recorded yet.
 
 alignment:
   namespace: "Erdos5"

@@ -115,8 +115,9 @@ lake comparator --config comparator.json
 ```
 
 `lake comparator` ships with the Lean toolchain (v4.35.0-rc3) and requires `bubblewrap` (Linux);
-see [`.github/workflows/ci.yml`](.github/workflows/ci.yml), which runs it with `--paranoid`
-(Lean kernel plus all bundled external checkers, including NanoDa).
+see [`.github/workflows/ci.yml`](.github/workflows/ci.yml), which runs it with `--paranoid`. In
+CI the solution is accepted by the Lean default and paranoid kernels, lean4lean, NanoDa,
+con-leche and con-ron, using only the axioms `propext`, `Classical.choice` and `Quot.sound`.
 
 ## Provenance and AI disclosure
 
